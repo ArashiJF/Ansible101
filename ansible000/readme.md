@@ -15,6 +15,9 @@ Ahora debes crear un conjunto de maquinas para pruebas, se crearán automáticam
     0.0.0.0:3306->3306/tcp, 0.0.0.0:2222->22/tcp   server02
     0.0.0.0:2221->22/tcp, 0.0.0.0:8000->80/tcp     server01
 
+## NOTA:
+Si ya existe una instalación de mysql, puede que sea necesario cambiar los puertos en ../create_dockers.sh para el server02.
+
 Si lo deseas puedes modificar el archivo `create_dockers.sh` ajustando los parametros que consideres necesarios para lanzar los dockers que se ajusten al experimento que diseñes.
 
     ../create_dockers.sh server:16.04
@@ -29,7 +32,19 @@ Opción 2: adición automática en el archivo de hosts del sistema
     echo "127.0.0.1 server01 server02 server03" | sudo tee -a /etc/hosts
 
 ## Cuarto paso, confirmación
-Realiza una prueba de conexión a las maquinas que se crearon recientemente, por defecto el paso anterior crea n cantidad de dockers con el `puerto 2221, 2222 y 2223` abiertos para conexión:
+Realiza una prueba de conexión a las maquinas que se crearon recientemente, por defecto el paso anterior crea n cantidad de dockers con el `puerto 2221, 2222 y 2223` abiertos para conexión.
+
+Antes de hacer dicha prueba se necesita cambiar los permisos de la key.private, si la terminal esta abierta en el directorio ansible000, introducir los siguientes comandos:
+
+Para quitar los permisos de lectura, escritura y ejecucion a todos:
+    
+    chmod a-rwx ../key.private
+
+Para agregar los permisos de lectura y escritura solo al usuario actual editando y/o ejecutando los servidores:
+    
+    chmod u+rw ../key.private
+
+Luego de hacer esto ya se puede probar la conexión a los dockers:
 
     ssh root@server01 -p 2221 -i ../key.private
     ssh root@server02 -p 2222 -i ../key.private
